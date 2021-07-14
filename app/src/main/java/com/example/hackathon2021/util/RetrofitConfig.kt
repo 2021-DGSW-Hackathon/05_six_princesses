@@ -10,14 +10,24 @@ import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 
 object RetrofitConfig {
-    private const val BASE_URL = "http://192.168.137.143:8080/"
+    private const val BASE_URL = "https://dgswhackathon2021.herokuapp.com/"
     private fun retrofit(): Retrofit =
         Retrofit.Builder().baseUrl(BASE_URL)
             .client(
-                OkHttpClient.Builder().addInterceptor(Interceptor()).build()
+                provideOkHttpClient(Interceptor())
             )
             .addConverterFactory(GsonConverterFactory.create())
             .build()
+
+    private fun provideOkHttpClient(
+        interceptor: Interceptor
+    ): OkHttpClient = OkHttpClient.Builder()
+        .run {
+            addInterceptor(interceptor)
+            readTimeout(100,TimeUnit.SECONDS)
+            writeTimeout(100,TimeUnit.SECONDS)
+            build()
+        }
 
     val accountRetrofit: AccountRetrofit by lazy {
         retrofit().create(AccountRetrofit::class.java)
@@ -28,14 +38,13 @@ object RetrofitConfig {
 
 
     class Interceptor : okhttp3.Interceptor {
-        override fun intercept(chain: okhttp3.Interceptor.Chain): Response {
+        override fun intercept(chain: okhttp3.Interceptor.Chain): Response = with(chain) {
             val req =
                 chain.request().newBuilder().addHeader(
                     "Authorization",
                     "Bearer " + mApplication.prefs.token
                 ).build()
-
-            return chain.proceed(req)
+            chain.proceed(req)
         }
 
     }

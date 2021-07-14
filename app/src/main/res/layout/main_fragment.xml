@@ -5,8 +5,8 @@
 
     <data>
         <variable
-            name="school"
-            type="com.example.hackathon2021.data.School" />
+            name="name"
+            type="String" />
     </data>
 
     <androidx.constraintlayout.motion.widget.MotionLayout
@@ -22,8 +22,15 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
+            app:endIconDrawable="@drawable/ic_baseline_close_24"
+            app:endIconMode="clear_text"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
+            app:hintAnimationEnabled="false"
+            app:hintTextColor="@color/main"
+            app:hintEnabled="false"
+            android:focusableInTouchMode="true"
+            android:focusable="true"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:startIconDrawable="@drawable/search">
@@ -31,6 +38,10 @@
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/edt_search_main_fragment"
                 android:layout_width="match_parent"
+                android:focusable="true"
+                android:hint="@{name}"
+                android:textColorHint="@color/icon"
+                android:focusableInTouchMode="true"
                 android:layout_height="50dp"
                 android:background="@drawable/search_bar"
                 android:gravity="center_vertical"
